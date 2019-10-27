@@ -1,12 +1,13 @@
 type Query {
     info: String!
-    feed: [Link!]!
+    feed(filter: String): [Link!]!
     link(id: ID!): Link
 }
 type Mutation {
     post(url: String!, description: String!): Link! 
     signup(email: String!, password: String!, name: String!) : AuthPayLoad
     login(email: String!, password: String!) : AuthPayLoad
+    vote(linkId: ID!): Vote
     # Update a link
     updateLink(id: ID!, url: String, description: String): Link
 
@@ -18,6 +19,7 @@ type Link {
     description: String!
     url: String!
     postedBy: User
+    votes: [Vote!]!
 }
 
 type AuthPayLoad {
@@ -29,5 +31,18 @@ type User {
     id: ID!
     name: String!
     email: String!
+    password: String!
     links: [Link!]!
+    votes: [Vote!]!
+}
+
+type Subscription {
+    newLink: Link
+    newVote: Vote
+}
+
+type Vote {
+    id: ID!
+    link: Link!
+    user: User!
 }
